@@ -9,9 +9,9 @@ another Prometheus server.
 _Note about native histograms: To scrape native histograms via federation, the
 scraping Prometheus server needs to set `scrape_native_histograms: true` in its
 scrape config, implying that the protobuf format is used for scraping. Should
-the federated metrics contain a mix of different sample types (float64, counter
-histogram, gauge histogram) for the same metric name, the federation payload
-will contain multiple metric families with the same name (but different types).
+the federated metrics contain a mix of different sample types (floats of any flavor, counter
+histograms, or gauge histograms) for the same metric name, the federation payload
+will contain multiple metric families with the same name (but different types – for technical reasons, float samples are always federated as `untyped`, while histogram samples are federated with their full type information).
 Technically, this violates the rules of the protobuf exposition format, but
 Prometheus is nevertheless able to ingest all metrics correctly._
 

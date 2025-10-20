@@ -38,11 +38,10 @@ histogram. Classic histograms are broken up into a number of series of float
 samples. From the perspective of PromQL, there are no “classic histogram
 samples”.
 
-Like float samples, histogram samples can have a counter or a gauge “flavor”,
-marking them as counter histograms or gauge histograms, respectively. In
-contrast to float samples, histogram samples “know” their flavor, allowing
-reliable warnings about mismatched operations (e.g. applying the `rate`
-function to a range vector of gauge histograms).
+Both float samples and histogram samples can have a counter or a gauge “flavor”.
+Float samples with a counter or gauge flavor are generally simply called “counters” or “gauges”, respectively, while their histogram counterparts are called “counter histograms” or “gauge histograms”.
+Float samples do not store their flavor, leaving it to the user to take their flavor into account when writing PromQL queries. (By convention, time series containing float counters have a name ending on `_total` to help with the distinction.)
+Histogram samples “know” their flavor, allowing reliable warnings about mismatched operations. (For example, applying the `rate` function to a range vector of gauge floats will most likely produce a nonsensical result, but the query will be processed without complains. However, if the range vector contains gauge histograms, the result of the query will be annotated with a warning.)
 
 Native histograms can have different bucket layouts, but they are generally
 convertible to compatible versions to apply binary and aggregation operations
@@ -70,8 +69,8 @@ For [instant queries](api.md#instant-queries), any of the above data types are a
 
 ## Literals
 
-The following section describes literal values, except for native histograms
-which do not have a literal representation.
+The following section describes literal values of various kinds.
+Note that there is no “histogram literal”.
 
 ### String literals
 
