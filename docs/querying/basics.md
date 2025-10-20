@@ -24,19 +24,15 @@ start with a couple of [examples](examples.md).
 ## Samples
 
 The value of a sample at a given timestamp returned by PromQL may be a float or
-a [native histogram](https://prometheus.io/docs/specs/native_histograms).
+a [native histogram](https://prometheus.io/docs/specs/native_histograms). A
+float sample is a simple floating point number, whereas a native histograms
+sample contains a full histogram including count, sum, and buckets.
 
-Native histograms can be optionally scraped by Prometheus or received by
-Prometheus over remote-write or OTLP.
-
-Once native histograms have been ingested into the TSDB, both instant vectors
-and range vectors may now contain samples that aren't simple floating point
-numbers (float samples), but complete histograms (histogram samples). A vector
-may contain a mix of float samples and histogram samples. Note that the term
-“histogram sample” in the PromQL documentation always refers to a native
-histogram. Classic histograms are broken up into a number of series of float
-samples. From the perspective of PromQL, there are no “classic histogram
-samples”.
+Note that the term “histogram sample” in the PromQL documentation always refers
+to a native histogram. The term "classic histogram" refers to a set of time
+series containing float samples with the `_bucket`, `_count`, and `_sum` 
+suffixes that together describe a histogram. From the perspective of PromQL,
+these contain just float samples, there are no “classic histogram samples”.
 
 Both float samples and histogram samples can have a counter or a gauge “flavor”.
 Float samples with a counter or gauge flavor are generally simply called “counters” or “gauges”, respectively, while their histogram counterparts are called “counter histograms” or “gauge histograms”.
@@ -66,6 +62,10 @@ expression), only some of these types are legal as the result of a
 user-specified expression.
 For [instant queries](api.md#instant-queries), any of the above data types are allowed as the root of the expression.
 [Range queries](api.md#range-queries) only support scalar-typed and instant-vector-typed expressions.
+
+Once native histograms have been ingested into the TSDB, both instant vectors
+and range vectors may now contain histogram samples alongside float samples.
+A vector may contain a mix of float samples and histogram samples.
 
 ## Literals
 
