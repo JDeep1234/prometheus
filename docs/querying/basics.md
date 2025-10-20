@@ -40,20 +40,7 @@ Float samples with a counter or gauge flavor are generally simply called
 called “counter histograms” or “gauge histograms”. Float samples do not store
 their flavor, leaving it to the user to take their flavor into account when
 writing PromQL queries. (By convention, time series containing float counters
-have a name ending on `_total` to help with the distinction.) Histogram samples
-“know” their flavor, allowing reliable warnings about mismatched operations.
-(For example, applying the `rate` function to a range vector of gauge floats
-will most likely produce a nonsensical result, but the query will be processed
-without complains. However, if the range vector contains gauge histograms, the
-result of the query will be annotated with a warning.)
-
-Native histograms can have different bucket layouts, but they are generally
-convertible to compatible versions to apply binary and aggregation operations
-to them. This is not true for all bucketing schemas. If incompatible
-histograms are encountered in an operation, the corresponding output vector
-element is removed from the result, flagged with a warn-level annotation.
-More details can be found in the
-[native histogram specification](https://prometheus.io/docs/specs/native_histograms/#compatibility-between-histograms).
+have a name ending on `_total` to help with the distinction.)
 
 ## Expression language data types
 
@@ -74,6 +61,21 @@ For [instant queries](api.md#instant-queries), any of the above data types are a
 Once native histograms have been ingested into the TSDB, both instant vectors
 and range vectors may now contain histogram samples alongside float samples.
 A vector may contain a mix of float samples and histogram samples.
+
+Since histogram samples “know” their counter or gauge flavor, this allows
+reliable warnings about mismatched operations. For example, applying the `rate`
+function to a range vector of gauge floats will most likely produce a
+nonsensical result, but the query will be processed without complains. However,
+if the range vector contains gauge histograms, the result of the query will be
+annotated with a warning.
+
+Native histograms can have different bucket layouts, but they are generally
+convertible to compatible versions to apply binary and aggregation operations
+to them. This is not true for all bucketing schemas. If incompatible
+histograms are encountered in an operation, the corresponding output vector
+element is removed from the result, flagged with a warn-level annotation.
+More details can be found in the
+[native histogram specification](https://prometheus.io/docs/specs/native_histograms/#compatibility-between-histograms).
 
 ## Literals
 
