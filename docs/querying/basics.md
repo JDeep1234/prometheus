@@ -35,9 +35,17 @@ suffixes that together describe a histogram. From the perspective of PromQL,
 these contain just float samples, there are no “classic histogram samples”.
 
 Both float samples and histogram samples can have a counter or a gauge “flavor”.
-Float samples with a counter or gauge flavor are generally simply called “counters” or “gauges”, respectively, while their histogram counterparts are called “counter histograms” or “gauge histograms”.
-Float samples do not store their flavor, leaving it to the user to take their flavor into account when writing PromQL queries. (By convention, time series containing float counters have a name ending on `_total` to help with the distinction.)
-Histogram samples “know” their flavor, allowing reliable warnings about mismatched operations. (For example, applying the `rate` function to a range vector of gauge floats will most likely produce a nonsensical result, but the query will be processed without complains. However, if the range vector contains gauge histograms, the result of the query will be annotated with a warning.)
+Float samples with a counter or gauge flavor are generally simply called
+“counters” or “gauges”, respectively, while their histogram counterparts are
+called “counter histograms” or “gauge histograms”. Float samples do not store
+their flavor, leaving it to the user to take their flavor into account when
+writing PromQL queries. (By convention, time series containing float counters
+have a name ending on `_total` to help with the distinction.) Histogram samples
+“know” their flavor, allowing reliable warnings about mismatched operations.
+(For example, applying the `rate` function to a range vector of gauge floats
+will most likely produce a nonsensical result, but the query will be processed
+without complains. However, if the range vector contains gauge histograms, the
+result of the query will be annotated with a warning.)
 
 Native histograms can have different bucket layouts, but they are generally
 convertible to compatible versions to apply binary and aggregation operations
